@@ -14,13 +14,20 @@
          </el-table-column>
          <el-table-column prop="name" label="名称" width="120">
          </el-table-column>
-         <el-table-column label="LOGO图标" width="120">
+         <el-table-column prop="price" label="金额" width="120">
+         </el-table-column>
+         <el-table-column prop="istype" label="等级类型" min-width="140">
             <template slot-scope="scope">
-             
-               <img :src="scope.row.logo" height="80px" width="80px" />
+               <span class="el-dropdown-link" style="color: #F56C6C;" v-if="scope.row.istype == 0">月卡</span>
+               <span class="el-dropdown-link" style="color: #67C23A;" v-if="scope.row.istype == 1">季度卡</span>
+               <span class="el-dropdown-link" style="color: #67C23A;" v-if="scope.row.istype == 2">年度卡</span>
             </template>
          </el-table-column>
-         <el-table-column prop="url" label="url地址" min-width="140">
+         <el-table-column prop="isview" label="视频观看次数" min-width="140">
+         </el-table-column>
+         <el-table-column prop="islike" label="点赞喜欢次数" min-width="140">
+         </el-table-column>
+         <el-table-column prop="ishello" label="打招呼次数" min-width="140">
          </el-table-column>
          <el-table-column prop="create_time" label="添加时间" width="140">
             <template slot-scope="scope">
@@ -39,7 +46,7 @@
             <template slot-scope="scope">
 
                <el-button @click="editUser(scope.row)" type="text" size="small">编辑</el-button>
-               <el-button @click="delUser(scope.row)" type="text" size="small" ><span class="c-red">删除</span></el-button>
+               <!-- <el-button @click="delUser(scope.row)" type="text" size="small" ><span class="c-red">删除</span></el-button> -->
                <!-- <el-button @click="delUser(scope.row)" type="text" size="small" v-if="scope.row.user_id>1"><span class="c-red">删除</span></el-button> -->
             </template>
          </el-table-column>
@@ -54,21 +61,28 @@
          @close="dialogVisible = false" append-to-body>
          <el-form :model="detail" :rules="rules" ref="userinfo" label-width="100px">
             <el-form-item label="名称" prop="name">
-               <el-input placeholder="请输入名称" v-model="detail.name"></el-input>
+               <el-input placeholder="请输入等级名称" v-model="detail.name"></el-input>
             </el-form-item>
-            <el-form-item label="URL地址" prop="url">
-               <el-input v-model="detail.url" placeholder="请输入URL地址"></el-input>
+            <el-form-item label="金额" prop="price">
+               <el-input v-model="detail.price" placeholder="请输入金额" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="LOGO图标" prop="logo">
-               <el-upload class="avatar-uploader" :headers="getToken" :action="getUrl" :show-file-list="false"
-                  :on-success="uploadSuccess" :on-change="change" :before-upload="beforeAvatarUpload">
-                  <img v-if="sysInfo_ico" :src="sysInfo_ico" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-               </el-upload>
-               <el-input v-model="sysInfo_ico" style="display: none;"></el-input>
+            <el-form-item label="视频观看次数" prop="islike">
+               <el-input v-model="detail.isview" placeholder="请输入点赞喜欢次数" type="number"></el-input>
+            </el-form-item>
+            <el-form-item label="点赞喜欢次数" prop="islike">
+               <el-input v-model="detail.islike" placeholder="请输入点赞喜欢次数" type="number"></el-input>
+            </el-form-item>
+            <el-form-item label="打招呼次数" prop="ishello">
+               <el-input v-model="detail.ishello" placeholder="请输入打招呼次数" type="number"></el-input>
             </el-form-item>
 
-
+            <el-form-item label="等级类型" prop="istype">
+               <el-radio-group v-model="detail.istype">
+                  <el-radio :label="0" border>月卡</el-radio>
+                  <el-radio :label="1" border>季度卡</el-radio>
+                  <el-radio :label="2" border>年度卡</el-radio>
+               </el-radio-group>
+            </el-form-item>
             <el-form-item label="状态" prop="status">
                <el-radio-group v-model="detail.status">
                   <el-radio :label="1" border>正常</el-radio>
@@ -122,10 +136,13 @@ export default {
          detail: {},
          originDetail: {
             name:'',
-            url:'',
-            logo:'',
+            islike:'',
+            price:'',
+            isview:'',
+            ishello:'',
             remark: '',
-            status: 1,
+            status:1,
+            istype:0,
          },
          rules: {
             name: [
@@ -171,7 +188,7 @@ export default {
       uploadSuccess(res, file) {
          console.log(res)
          this.sysInfo_ico = res.data;
-         this.detail.logo=res.data;
+        
       },
       change(file, fileList) {
          // this.sysInfo.logo = URL.createObjectURL(file.raw);
@@ -192,7 +209,7 @@ export default {
       },
       // 获取用户列表
       getUserList() {
-         this.$api.thirdApi.getUserList(this.params).then(res => {
+         this.$api.levelApi.getUserList(this.params).then(res => {
             if (res.code == 0) {
                this.userList = res.data;
                this.total = res.count;
@@ -251,7 +268,7 @@ export default {
          this.$refs[formName].validate((valid) => {
             if (valid) {
                if (this.formType == 'add') {
-                  this.$api.thirdApi.addUser(this.detail).then(res => {
+                  this.$api.levelApi.addUser(this.detail).then(res => {
                      if (res.code == 0) {
                         this.dialogVisible = false;
                         this.getUserList();
@@ -264,7 +281,7 @@ export default {
                } else {
                   let detail = JSON.parse(JSON.stringify(this.detail));
                   delete detail.password;
-                  this.$api.thirdApi.editUser(detail).then(res => {
+                  this.$api.levelApi.editUser(detail).then(res => {
                      if (res.code == 0) {
                         this.dialogVisible = false;
                         this.getUserList();
@@ -294,7 +311,6 @@ export default {
                type: 'warning'
             });
             return false;
-            
          }
          if (this.password != this.repass) {
             this.$message({
@@ -307,7 +323,7 @@ export default {
             user_id: this.currentUser.user_id,
             password: this.password
          }
-         this.$api.thirdApi.editPassword(params).then(res => {
+         this.$api.levelApi.editPassword(params).then(res => {
             if (res.code == 0) {
                this.dialogPass = false;
                this.password = '';
@@ -325,7 +341,7 @@ export default {
             user_id: item.user_id,
             status: item.status
          }
-         this.$api.thirdApi.setStatus(params).then(res => {
+         this.$api.levelApi.setStatus(params).then(res => {
             if (res.code == 0) {
                this.$message({
                   message: res.msg,
@@ -339,7 +355,7 @@ export default {
             user_id: item.user_id,
             role: command
          }
-         this.$api.thirdApi.setRole(params).then(res => {
+         this.$api.levelApi.setRole(params).then(res => {
             if (res.code == 0) {
                item.role = command;
                this.$message({
@@ -358,7 +374,7 @@ export default {
             let params = {
                id: item.id
             }
-            this.$api.thirdApi.delUser(params).then(res => {
+            this.$api.levelApi.delUser(params).then(res => {
                if (res.code == 0) {
                   this.$message({
                      message: res.msg,

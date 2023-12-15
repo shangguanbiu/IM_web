@@ -7,6 +7,7 @@ import groupApi from '@/api/manage/group.js';
 import imApi from '@/api/im.js';
 import commonApi from '@/api/common.js';
 import friendApi from '@/api/friend.js';
+import levelApi from '@/api/manage/level.js';
 // 导出接口
 export default {
     taskApi,
@@ -16,5 +17,6 @@ export default {
     imApi,
     commonApi,
     friendApi,
-    thirdApi
+    thirdApi,
+    levelApi
 }

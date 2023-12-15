@@ -1,11 +1,14 @@
 <template>
     <el-dialog :title="title" :visible="visible" :modal="true" :width="width" @open="openDialog" @close="closeDialog"
         append-to-body>
-        <div class="mb-20" >
+        <div class="mb-20" v-show="isAdd">
             是否公开：<el-radio-group v-model="ispublic">
                   <el-radio :label="1" border>是</el-radio>
                   <el-radio :label="0" border>否</el-radio>
                </el-radio-group>
+        </div>
+        <div class="mb-20" v-show="isAdd">
+            描述：<el-input v-model="desc" placeholder="请输入简单的描述" style="width:300px"></el-input>
         </div>
         <div class="mb-20" v-show="isAdd">
             群聊名称：<el-input v-model="groupName" placeholder="请输入群聊名称" style="width:300px"></el-input> <span
@@ -55,6 +58,7 @@ export default {
             selectUid: [],
             allUser: [],
             groupName: "",
+            desc:'',
             defaultProps: {
                 key: "user_id",
                 label: "realname",
@@ -108,7 +112,7 @@ export default {
                     }
                     break;
             }
-            this.$emit("manageGroup",this.ispublic, this.selectUid, this.isAdd, this.groupName);
+            this.$emit("manageGroup",this.ispublic, this.selectUid, this.isAdd, this.groupName,this.desc);
         },
         // 获取所有人员列表
         getAllUser(data) {

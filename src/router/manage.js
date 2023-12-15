@@ -24,6 +24,14 @@ export default [
                     title: '设置',
                     icon: 'el-icon-setting'
                 }
+            },{
+                path: '/manage/level',
+                name: 'level',
+                component: () =>import ('@/views/manage/level.vue'),
+                meta: { 
+                    title: '等级',
+                    icon: 'el-icon-medal-1'
+                }
             },
             {
                 path: '/manage/user',
@@ -42,15 +50,16 @@ export default [
                     title: '群聊',
                     icon: 'el-icon-chat-dot-square'
                 }
-            },{
-                path: '/manage/third',
-                name: 'third',
-                component: () =>import ('@/views/manage/third.vue'),
-                meta: { 
-                    title: '第三方',
-                    icon: 'el-icon-s-fold'
-                }
             },
+            // {
+            //     path: '/manage/third',
+            //     name: 'third',
+            //     component: () =>import ('@/views/manage/third.vue'),
+            //     meta: { 
+            //         title: '第三方',
+            //         icon: 'el-icon-s-fold'
+            //     }
+            // },
             {
                 path: '/manage/files',
                 name: 'files',

@@ -17,13 +17,13 @@
       <el-table :data="userList" stripe style="width: 100%;border: solid 1px #e3e3e3;" :height="'calc(100vh - 200px)'"
          :header-cell-style="{ 'background-color': '#f5f7fa', 'color': '#909399' }" @sort-change="sortChange"
          @row-dblclick="handleClick">
-         <el-table-column fixed prop="user_id" label="ID" sortable="custom" width="150">
+         <el-table-column fixed prop="user_id" label="ID" sortable="custom" width="50">
          </el-table-column>
-         <el-table-column prop="realname" label="姓名" width="120">
+         <el-table-column prop="realname" label="姓名" width="100">
          </el-table-column>
          <el-table-column prop="account" label="账号" width="120">
          </el-table-column>
-         <el-table-column prop="sex" label="性别" sortable="custom" width="120">
+         <el-table-column prop="sex" label="性别" sortable="custom" width="90">
             <template slot-scope="scope">
                <span class="el-dropdown-link" v-if="scope.row.sex == 0">女</span>
                <span class="el-dropdown-link" v-if="scope.row.sex == 1">男</span>
@@ -46,10 +46,33 @@
                </el-dropdown>
             </template>
          </el-table-column>
-         <el-table-column  label="是否是附近的人" width="120">
+         <el-table-column label="所属等级" width="120">
+            <template slot-scope="scope">
+               <span class="el-dropdown-link" style="color: #F56C6C;">{{ scope.row.islevel_name
+                  !== '' ? scope.row.islevel_name : '普通会员' }}</span>
+
+            </template>
+         </el-table-column>
+         <el-table-column prop="begin_level_time" label="开通会员时间" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.create_time }}</span>
+            </template>
+         </el-table-column>
+         <el-table-column prop="end_level_time" label="会员到期时间" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.create_time }}</span>
+            </template>
+         </el-table-column>
+         <el-table-column label="是否是附近的人" width="100">
             <template slot-scope="scope">
                <span class="el-dropdown-link" style="color: #F56C6C;" v-if="scope.row.ifpublic == 0">否</span>
                <span class="el-dropdown-link" style="color: #67C23A;" v-if="scope.row.ifpublic == 1">是</span>
+            </template>
+         </el-table-column>
+         <el-table-column label="是否喜欢我的TA" width="100">
+            <template slot-scope="scope">
+               <span class="el-dropdown-link" style="color: #F56C6C;" v-if="scope.row.ifta == 0">否</span>
+               <span class="el-dropdown-link" style="color: #67C23A;" v-if="scope.row.ifta == 1">是</span>
             </template>
          </el-table-column>
          <el-table-column prop="create_time" label="注册时间" width="140">
@@ -71,9 +94,17 @@
                </el-popover>
             </template>
          </el-table-column>
-         <el-table-column prop="remark" label="备注" min-width="300">
+         <el-table-column prop="tags" label="标签">
          </el-table-column>
-         <el-table-column prop="status" label="状态" width="120">
+         <el-table-column prop="islikes" label="被Ta打招呼的人" min-width="120">
+            <template slot-scope="scope">
+               <span class="el-dropdown-link" style="color: #F56C6C;">{{ scope.row.islikes }}</span>
+
+            </template>
+         </el-table-column>
+         <el-table-column prop="remark" label="备注" min-width="100">
+         </el-table-column>
+         <el-table-column prop="status" label="状态" width="70">
             <template slot-scope="scope">
                <el-switch @change="setStatus(scope.row)" v-if="scope.row.user_id != 1" v-model="scope.row.status"
                   :active-value="1" :inactive-value="0">
@@ -96,48 +127,98 @@
             layout="total, sizes, prev, pager, next, jumper" :total="total">
          </el-pagination>
       </div>
-      <el-dialog :title="formTitle" :visible.sync="dialogVisible" :modal="true" width="500px" @close="dialogVisible = false"
-         append-to-body>
-         <el-form :model="detail" :rules="rules" ref="userinfo" label-width="100px">
-            <el-form-item label="账号" prop="account">
-               <el-input placeholder="请输入邮箱或者手机号" v-model="detail.account"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password" v-show="formType == 'add'">
-               <el-input v-model="detail.password" show-password placeholder="请输入密码"></el-input>
-            </el-form-item>
-            <el-form-item label="姓名" prop="realname">
-               <el-input placeholder="请输入用户名称" v-model="detail.realname"></el-input>
-            </el-form-item>
-            <el-form-item label="e-mail" prop="email">
-               <el-input placeholder="请输入邮箱地址" v-model="detail.email"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="sex">
-               <el-radio-group v-model="detail.sex">
-                  <el-radio :label="2" border>未知</el-radio>
-                  <el-radio :label="1" border>男</el-radio>
-                  <el-radio :label="0" border>女</el-radio>
-               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="角色" prop="role">
-               <el-radio-group v-model="detail.role">
-                  <el-radio :label="0" border>普通用户</el-radio>
-                  <el-radio :label="2" border>管理员</el-radio>
-               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="状态" prop="status">
-               <el-radio-group v-model="detail.status">
-                  <el-radio :label="1" border>正常</el-radio>
-                  <el-radio :label="0" border>禁用</el-radio>
-               </el-radio-group>
-            </el-form-item>
-            <el-form-item label="是否附近的人" prop="ifpublic">
-               <el-radio-group v-model="detail.ifpublic">
-                  <el-radio :label="1" border>是</el-radio>
-                  <el-radio :label="0" border>否</el-radio>
-               </el-radio-group>
+      <el-dialog :title="formTitle" :visible.sync="dialogVisible" :modal="true" width="1000px"
+         @close="dialogVisible = false" append-to-body>
+         <el-form :model="detail" :rules="rules" ref="userinfo" label-width="130px">
+            <div style="display: flex;">
+               <div style="width: 50%;">
+                  <el-form-item label="账号" prop="account">
+                     <el-input placeholder="请输入邮箱或者手机号" v-model="detail.account"></el-input>
+                  </el-form-item>
+                  <el-form-item label="密码" prop="password" v-show="formType == 'add'">
+                     <el-input v-model="detail.password" show-password placeholder="请输入密码"></el-input>
+                  </el-form-item>
+                  <el-form-item label="姓名" prop="realname">
+                     <el-input placeholder="请输入用户名称" v-model="detail.realname"></el-input>
+                  </el-form-item>
+                  <el-form-item label="所属等级" prop="islevel">
+                     <el-select v-model="detail.islevel" size="small" filterable style="width: 100%" placeholder="请选择等级">
+                        <el-option :value="0" label="普通会员"></el-option>
+                        <el-option :value="levelitem.id" :label="levelitem.name" v-for="(levelitem, indexl) in leveList"
+                           :key="indexl"></el-option>
+
+                     </el-select>
+                  </el-form-item>
+                  <el-form-item label="e-mail" prop="email">
+                     <el-input placeholder="请输入邮箱地址" v-model="detail.email"></el-input>
+                  </el-form-item>
+                  <el-form-item label="所属标签" prop="tags">
+                     <el-input placeholder="请输入标签" v-model="detail.tags"></el-input>
+                     <span>标签填写格式文字加英文逗号隔开如：好看,美女,阳光</span>
+                  </el-form-item>
+               </div>
+               <div style="width: 50%;">
+                  <el-form-item label="岁数">
+                     <el-input placeholder="请输入岁数" v-model="detail.ages" type="number"></el-input>
+                  </el-form-item>
+                  <el-form-item label="性别" prop="sex">
+                     <el-radio-group v-model="detail.sex">
+                        <el-radio :label="2" border>未知</el-radio>
+                        <el-radio :label="1" border>男</el-radio>
+                        <el-radio :label="0" border>女</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="角色" prop="role">
+                     <el-radio-group v-model="detail.role">
+                        <el-radio :label="0" border>普通用户</el-radio>
+                        <el-radio :label="2" border>管理员</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="状态" prop="status">
+                     <el-radio-group v-model="detail.status">
+                        <el-radio :label="1" border>正常</el-radio>
+                        <el-radio :label="0" border>禁用</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="是否附近的人" prop="ifpublic">
+                     <el-radio-group v-model="detail.ifpublic">
+                        <el-radio :label="1" border>是</el-radio>
+                        <el-radio :label="0" border>否</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="是否喜欢我的TA" prop="ifpublic">
+                     <el-radio-group v-model="detail.ifta">
+                        <el-radio :label="1" border>是</el-radio>
+                        <el-radio :label="0" border>否</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+               </div>
+            </div>
+
+
+            <el-form-item label="个性签名" prop="remark">
+               <el-input type="textarea" :rows="2" v-model="detail.motto"></el-input>
             </el-form-item>
             <el-form-item label="备注" prop="remark">
                <el-input type="textarea" :rows="2" v-model="detail.remark"></el-input>
+            </el-form-item>
+            <el-form-item label="附近的人大图" prop="logo">
+               <el-upload class="avatar-uploader" :headers="getToken" :action="getUrl" :show-file-list="false"
+                  :on-success="uploadSuccess" :on-change="change" :before-upload="beforeAvatarUpload">
+                  <img v-if="nearby_img" :src="nearby_img" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+               </el-upload>
+               <el-input v-model="nearby_img" style="display: none;"></el-input>
+            </el-form-item>
+            <el-form-item label="详情大图" prop="logo">
+               <el-upload class="avatar-uploader" :headers="getToken" :action="getUrl" list-type="picture"
+                  :on-success="uploadSuccess2" :on-remove="del_file" :file-list="fileList" :on-change="change"
+                  :before-upload="beforeAvatarUpload">
+                  <!-- <img v-if="sysInfo_ico" :src="sysInfo_ico" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                  <el-button size="small" type="primary">点击上传</el-button>
+               </el-upload>
+
             </el-form-item>
             <el-form-item>
                <el-button type="primary" @click="submitForm('userinfo')">保存</el-button>
@@ -163,9 +244,12 @@
  
 <script>
 import { mapState } from 'vuex';
+import Lockr from 'lockr'
 export default {
    data() {
       return {
+         nearby_img: '',
+         nearby_arr: [],
          total: 0,
          params: {
             page: 1,
@@ -175,6 +259,7 @@ export default {
             order_type: 1,
          },
          userList: [],
+         fileList: [],
          formTitle: "添加成员",
          formType: "add",
          dialogVisible: false,
@@ -182,13 +267,20 @@ export default {
          originDetail: {
             realname: '',
             password: '123456',
+            nearby_arr: null,
+            nearby_img: null,
             email: '',
             sex: 2,
+            ages: null,
             role: 0,
             remark: '',
             status: 1,
-            ifpublic:0
+            tags: null,
+            ifpublic: 0,
+            ifta:0,
+            islevel: 0,
          },
+         leveList: [],
          rules: {
             account: [
                { min: 4, max: 32, message: '长度在 4 到 32 个字符', trigger: 'blur' }
@@ -214,7 +306,14 @@ export default {
    computed: {
       ...mapState({
          globalConfig: state => state.globalConfig
-      })
+      }),
+      getToken() {
+         const authKey = Lockr.get('authToken');
+         return { Authorization: authKey }
+      },
+      getUrl() {
+         return window.BASE_URL + '/common/upload/uploadImage'
+      }
    },
    watch: {
       dialogVisible(New) {
@@ -225,7 +324,9 @@ export default {
    },
    mounted() {
       this.detail = this.originDetail;
-      this.getUserList();
+
+      this.getLevelList()
+
       let regauth = this.globalConfig.sysInfo.regauth ?? 0;
       let msg = '请输入账号：4-32个字符';
       switch (parseInt(regauth)) {
@@ -257,6 +358,29 @@ export default {
       }
    },
    methods: {
+      uploadSuccess(res, file) {
+
+         this.nearby_img = res.data;
+         this.detail.nearby_img = res.data;
+      },
+      uploadSuccess2(res, file) {
+
+         this.nearby_arr.push(res.data)
+
+      },
+      del_file(file, fileList) {
+         this.nearby_arr.forEach((item, n_index) => {
+            if (item.name == file.name) {
+               this.nearby_arr.splice(n_index, 1)
+            }
+         })
+      },
+      change(file, fileList) {
+
+      },
+      beforeAvatarUpload(file) {
+
+      },
       // 获取用户列表
       getUserList() {
          this.$api.userApi.getUserList(this.params).then(res => {
@@ -264,6 +388,30 @@ export default {
                this.userList = res.data;
                this.total = res.count;
                this.params.page = res.page;
+               for (var i = 0; i < this.userList.length; i++) {
+                  for (var k = 0; k < this.leveList.length; k++) {
+                     if (this.userList[i].islevel == this.leveList[k].id) {
+                        this.userList[i].islevel_name = this.leveList[k].name
+                     }
+                  }
+               }
+            }
+         })
+      },
+      // 获取等级列表
+      getLevelList() {
+         this.leveList = [];
+         var params = {
+            page: 1,
+            limit: 100,
+            keywords: '',
+            order_field: '',
+            order_type: 1,
+         };
+         this.$api.levelApi.getUserList(params).then(res => {
+            if (res.code == 0) {
+               this.leveList = res.data;
+               this.getUserList();
             }
          })
       },
@@ -290,18 +438,42 @@ export default {
       },
       // 添加成员
       addUser() {
+
          this.formTitle = "添加成员";
          this.formType = "add";
          this.dialogVisible = true;
+         this.nearby_img = '';
+         this.fileList = [];
       },
       // 修改成员
       editUser(item) {
+
+         this.nearby_img = ''
+         this.fileList = []
+
          let detail = item;
          this.formTitle = "修改成员";
          this.formType = "edit";
          this.dialogVisible = true;
          detail.password = 'rainagd';
+
          this.detail = detail;
+
+         this.nearby_img = item.nearby_img;
+
+         var imgs = { name: '', url: '' }
+         console.log('ddddddd', item)
+         if (item.nearby_arr !== null && item.nearby_arr !== '') {
+            const get_nearby_arr = item.nearby_arr.split(',')
+            this.nearby_arr = get_nearby_arr
+            get_nearby_arr.forEach((item, n_index) => {
+               imgs.name = '图片' + n_index
+               imgs.url = item
+               this.fileList.push(imgs)
+               imgs = { name: '', url: '' }
+            })
+         }
+
       },
       validateContact(rule, value, callback) {
          if (!value) {
@@ -316,6 +488,8 @@ export default {
          this.$refs[formName].validate((valid) => {
             if (valid) {
                if (this.formType == 'add') {
+                  console.log('add-555', this.detail)
+                  this.detail.nearby_arr = this.nearby_arr.toString()
                   this.$api.userApi.addUser(this.detail).then(res => {
                      if (res.code == 0) {
                         this.dialogVisible = false;
@@ -327,8 +501,11 @@ export default {
                      }
                   })
                } else {
+                  this.detail.nearby_arr = this.nearby_arr.toString()
                   let detail = JSON.parse(JSON.stringify(this.detail));
+
                   delete detail.password;
+
                   this.$api.userApi.editUser(detail).then(res => {
                      if (res.code == 0) {
                         this.dialogVisible = false;
@@ -388,7 +565,7 @@ export default {
          let params = {
             user_id: item.user_id,
             status: item.status,
-            ifpublic:item.status
+            ifpublic: item.status
          }
          this.$api.userApi.setStatus(params).then(res => {
             if (res.code == 0) {
@@ -447,4 +624,30 @@ export default {
    background-color: #f5f5f5;
    color: #333;
 }
-</style>
+
+::v-deep .avatar-uploader .el-upload {
+   border: 1px dashed #d9d9d9;
+   border-radius: 6px;
+   cursor: pointer;
+   position: relative;
+   overflow: hidden;
+}
+
+::v-deep .avatar-uploader .el-upload:hover {
+   border-color: #409EFF;
+}
+
+::v-deep .avatar-uploader-icon {
+   font-size: 28px;
+   color: #8c939d;
+   width: 120px;
+   height: 120px;
+   line-height: 120px;
+   text-align: center;
+}
+
+.avatar {
+   width: 120px;
+   height: 120px;
+   display: block;
+}</style>
