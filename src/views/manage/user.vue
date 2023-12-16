@@ -272,6 +272,11 @@ export default {
             email: '',
             sex: 2,
             ages: null,
+            islevel_name:'',
+            islikes:'',
+            begin_level_time:'',
+            end_level_time:'',
+            
             role: 0,
             remark: '',
             status: 1,
