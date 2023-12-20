@@ -25,9 +25,11 @@
          </el-table-column>
          <el-table-column prop="isview" label="视频观看次数" min-width="140">
          </el-table-column>
-         <el-table-column prop="islike" label="点赞喜欢次数" min-width="140">
+         <el-table-column prop="iszan" label="点赞喜欢次数" min-width="140">
          </el-table-column>
-         <el-table-column prop="ishello" label="打招呼次数" min-width="140">
+         <el-table-column prop="istalk" label="打招呼次数" min-width="140">
+         </el-table-column>
+         <el-table-column prop="isgroup" label="加群次数" min-width="140">
          </el-table-column>
          <el-table-column prop="create_time" label="添加时间" width="140">
             <template slot-scope="scope">
@@ -66,14 +68,18 @@
             <el-form-item label="金额" prop="price">
                <el-input v-model="detail.price" placeholder="请输入金额" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="视频观看次数" prop="islike">
+            <el-form-item label="视频观看次数" prop="isview">
                <el-input v-model="detail.isview" placeholder="请输入点赞喜欢次数" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="点赞喜欢次数" prop="islike">
-               <el-input v-model="detail.islike" placeholder="请输入点赞喜欢次数" type="number"></el-input>
+            <el-form-item label="打招呼次数" prop="istalk">
+               <el-input v-model="detail.istalk" placeholder="请输入打招呼次数" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="打招呼次数" prop="ishello">
-               <el-input v-model="detail.ishello" placeholder="请输入打招呼次数" type="number"></el-input>
+            <el-form-item label="点赞喜欢次数" prop="iszan">
+               <el-input v-model="detail.iszan" placeholder="请输入点赞喜欢次数" type="number"></el-input>
+            </el-form-item>
+           
+            <el-form-item label="加群次数" prop="isgroup">
+               <el-input v-model="detail.isgroup" placeholder="请输入打招呼次数" type="number"></el-input>
             </el-form-item>
 
             <el-form-item label="等级类型" prop="istype">
@@ -136,10 +142,11 @@ export default {
          detail: {},
          originDetail: {
             name:'',
-            islike:'',
+            iszan:0,
             price:'',
-            isview:'',
-            ishello:'',
+            isview:0,
+            istalk:0,
+            isgroup:0,
             remark: '',
             status:1,
             istype:0,

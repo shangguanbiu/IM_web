@@ -53,14 +53,34 @@
 
             </template>
          </el-table-column>
+         <el-table-column prop="begin_level_time" label="每日剩余浏览次数" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.isview }}</span>
+            </template>
+         </el-table-column>
+         <el-table-column prop="begin_level_time" label="每日剩余打招呼次数" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.istalk }}</span>
+            </template>
+         </el-table-column>
+         <el-table-column prop="begin_level_time" label="每日剩余点赞喜欢次数" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.iszan }}</span>
+            </template>
+         </el-table-column>
+         <el-table-column prop="begin_level_time" label="每日剩余加群次数" width="140">
+            <template slot-scope="scope">
+               <span slot="reference">{{ scope.row.isgroup }}</span>
+            </template>
+         </el-table-column>
          <el-table-column prop="begin_level_time" label="开通会员时间" width="140">
             <template slot-scope="scope">
-               <span slot="reference">{{ scope.row.create_time }}</span>
+               <span slot="reference">{{ scope.row.begin_level_time !==null?change_time(scope.row.begin_level_time):''}}</span>
             </template>
          </el-table-column>
          <el-table-column prop="end_level_time" label="会员到期时间" width="140">
             <template slot-scope="scope">
-               <span slot="reference">{{ scope.row.create_time }}</span>
+               <span slot="reference">{{scope.row.end_level_time !==null?change_time(scope.row.end_level_time):''}}</span>
             </template>
          </el-table-column>
          <el-table-column label="是否是附近的人" width="100">
@@ -96,7 +116,7 @@
          </el-table-column>
          <el-table-column prop="tags" label="标签">
          </el-table-column>
-         <el-table-column prop="islikes" label="被Ta打招呼的人" min-width="120">
+         <el-table-column prop="islikes" label="被Ta喜欢的人" min-width="120">
             <template slot-scope="scope">
                <span class="el-dropdown-link" style="color: #F56C6C;">{{ scope.row.islikes }}</span>
 
@@ -363,6 +383,18 @@ export default {
       }
    },
    methods: {
+      change_time(val){
+      var time = new Date(val*1000); //获取当前时间
+			var y=time.getFullYear()
+      var m=time.getMonth()
+			var d=time.getDate()
+
+      var h=time.getHours()
+      var m=time.getMinutes()
+      var s=time.getSeconds()
+
+      return y+'-'+m+'-'+d+' '+h+':'+m+':'+s
+    },
       uploadSuccess(res, file) {
 
          this.nearby_img = res.data;
@@ -397,6 +429,8 @@ export default {
                   for (var k = 0; k < this.leveList.length; k++) {
                      if (this.userList[i].islevel == this.leveList[k].id) {
                         this.userList[i].islevel_name = this.leveList[k].name
+                     }else if(this.userList[i].islevel ==0){
+                        this.userList[i].islevel_name ='普通会员'
                      }
                   }
                }
