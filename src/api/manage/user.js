@@ -12,6 +12,20 @@ userApi.getUserList = (data) => {
         data: data,
     });
 };
+/**
+ * 用户列表
+ * @param {*} data
+ */
+userApi.getUserList_real = (data) => {
+    return request({
+        url: "/manage/User/index_real",
+        method: "post",
+        data: data,
+    });
+};
+
+
+
 
 // 添加用户
 userApi.addUser = (data) => {

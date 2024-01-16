@@ -1,6 +1,6 @@
 <template>
     <el-dialog
-        title="添加好友"
+        title="打招呼"
         :visible="visible"
         :modal="true"
         :width="width"

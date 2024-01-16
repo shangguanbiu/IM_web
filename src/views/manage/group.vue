@@ -183,10 +183,11 @@
             this.getGroupList();
         },
         //   创建群聊或添加成员
-        manageGroup(ispublic,selectUid,isAdd,groupName,isdesc){
+        manageGroup(ispublic,selectUid,isAdd,groupName,isdesc,isnumber){
+           
             this.createChatBox = false;
             if(isAdd){
-                this.$api.imApi.addGroupAPI({ user_ids: selectUid,name:groupName,ifpublic:Number(ispublic),desc:isdesc  }).then(res => {
+                this.$api.imApi.addGroupAPI({ user_ids: selectUid,name:groupName,ifpublic:Number(ispublic),desc:isdesc,is_number:Number(isnumber)  }).then(res => {
                     if (res.code == 0) {
                         this.$message.success('创建成功'); 
                         this.params.page = 1;
@@ -194,7 +195,7 @@
                     }
                 });
             }else{
-                this.$api.groupApi.addGroupUser({ group_id:this.active, user_ids: selectUid,ifpublic:Number(ispublic) }).then(res => {
+                this.$api.groupApi.addGroupUser({ group_id:this.active, user_ids: selectUid,ifpublic:Number(ispublic),is_number:Number(isnumber) }).then(res => {
                     if (res.code == 0) {
                         this.$message.success('添加成功'); 
                         this.getGroupUser(this.active);

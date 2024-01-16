@@ -36,6 +36,8 @@ const state = {
 
 const mutations = {
     SET_USERINFO: (state, userInfo) => {
+
+        localStorage.setItem('userinfo',JSON.stringify(userInfo))
         Lockr.set('UserInfo', userInfo)
         state.userInfo = userInfo
         if(userInfo.setting) {

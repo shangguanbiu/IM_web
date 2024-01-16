@@ -25,7 +25,7 @@
           <div>
             <div class="cover">
               <i class="lemon-icon-message"></i>
-              <p><b>即时聊天 Raingad</b> IM</p>
+              <p><b>抱抱</b> IM</p>
             </div>
           </div>
         </template>
@@ -137,8 +137,8 @@
                 circle
               ></el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="addFriend">添加朋友</el-dropdown-item>
-                <el-dropdown-item command="addGroup" v-if="globalConfig.chatInfo.groupChat">创建群聊</el-dropdown-item>
+                <el-dropdown-item command="addFriend">打招呼</el-dropdown-item>
+                <!-- <el-dropdown-item command="addGroup" v-if="globalConfig.chatInfo.groupChat">创建群聊</el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
               

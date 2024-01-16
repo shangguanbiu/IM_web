@@ -56,7 +56,7 @@
             <el-footer class="footer">
               <!-- <el-button round>加好友</el-button> -->
               <el-button type="primary" v-if="isFriend" round @click="openChat()" style="width:150px">发消息</el-button>
-              <el-button type="primary" v-if="globalConfig.sysInfo.runMode==2 && !detail.friend && user_id!=userInfo.user_id" round @click="addFriend()" style="width:150px">加好友</el-button>
+              <el-button type="primary" v-if="globalConfig.sysInfo.runMode==2 && !detail.friend && user_id!=userInfo.user_id" round @click="addFriend()" style="width:150px">打招呼</el-button>
               <el-button round v-if="options.isManage" style="width:150px" @click="editUser">编辑资料</el-button>
             </el-footer>
           </el-container>
@@ -126,7 +126,7 @@
         // 添加好友
         addFriend(){
           this.closeDialog();
-          this.$prompt('请填写验证信息，让朋友知道你！', '添加好友', {
+          this.$prompt('请填写内容，让朋友知道你！', '打招呼', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
           }).then(({ value }) => {
@@ -136,7 +136,7 @@
             }
             this.$api.friendApi.addFriend({user_id:this.detail.user_id,remark:value}).then(res=>{
               if(res.code == 0){
-                this.$message.success('已发送好友申请');
+                this.$message.success('已发送');
               }
             })
           }).catch((error) => {

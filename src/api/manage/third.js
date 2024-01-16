@@ -12,7 +12,61 @@ thirdApi.getUserList = (data) => {
         data: data,
     });
 };
-
+/**
+ * 打招呼列表
+ * @param {*} data
+ */
+thirdApi.getTalkList = (data) => {
+    return request({
+        url: "/manage/User/talk_index",
+        method: "post",
+        data: data,
+    });
+};
+/**
+ * 打情趣表
+ * @param {*} data
+ */
+thirdApi.getshopList = (data) => {
+    return request({
+        url: "/manage/Third/shop_list",
+        method: "post",
+        data: data,
+    });
+};
+/**
+ * 添加商品
+ * @param {*} data
+ */
+thirdApi.AddshopList = (data) => {
+    return request({
+        url: "/manage/Third/shop_add",
+        method: "post",
+        data: data,
+    });
+};
+/**
+ * 编辑商品
+ * @param {*} data
+ */
+thirdApi.EditshopList = (data) => {
+    return request({
+        url: "/manage/Third/shop_edit",
+        method: "post",
+        data: data,
+    });
+};
+/**
+ * del商品
+ * @param {*} data
+ */
+thirdApi.DelshopList = (data) => {
+    return request({
+        url: "/manage/Third/shop_del",
+        method: "post",
+        data: data,
+    });
+};
 // 添加用户
 thirdApi.addUser = (data) => {
     return request({

@@ -5,10 +5,13 @@ import Home from '@/views/Home'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 import manage from './manage.js'
+import manage_com from './manage_com.js'
+import manage_agent from './manage_agent.js'
+
 Vue.use(Router)
 
 export const constantRouterMap = [
-    
+
     {
         path: '/chat',
         name: 'chat',
@@ -47,17 +50,53 @@ export const constantRouterMap = [
     {
         path: '/404',
         component: () =>
-            import ('@/views/404'),
+            import('@/views/404'),
         hidden: true
     }
 ];
+let getitem = localStorage.getItem('userinfo')
+let user_info_obj = JSON.parse(getitem)
+let createRouter;
 
-const createRouter = () => new Router({
-    mode: 'hash', // require service support
-    scrollBehavior: () => ({ y: 0 }),
-    routes: [...constantRouterMap,...manage]
-})
+if(user_info_obj !==null){
 
+    if(user_info_obj.role ==2&&user_info_obj.ifagent ==0){
+         createRouter = () => new Router({
+            mode: 'hash', // require service support
+            scrollBehavior: () => ({ y: 0 }),
+            routes: [...constantRouterMap, ...manage_com]
+        })
+    }
+    if(user_info_obj.role ==2&&user_info_obj.ifagent ==1){
+        createRouter = () => new Router({
+           mode: 'hash', // require service support
+           scrollBehavior: () => ({ y: 0 }),
+           routes: [...constantRouterMap, ...manage_agent]
+       })
+   }
+    
+    if(user_info_obj.role ==1){
+         createRouter = () => new Router({
+            mode: 'hash', // require service support
+            scrollBehavior: () => ({ y: 0 }),
+            routes: [...constantRouterMap, ...manage]
+        })
+    }
+    if(user_info_obj.role ==0){
+        createRouter = () => new Router({
+           mode: 'hash', // require service support
+           scrollBehavior: () => ({ y: 0 }),
+           routes: [...constantRouterMap]
+       })
+   }
+
+}else{
+    createRouter = () => new Router({
+        mode: 'hash', // require service support
+        scrollBehavior: () => ({ y: 0 }),
+        routes: [...constantRouterMap, ...manage]
+    })
+}
 const router = createRouter()
 export function resetRouter() {
     const newRouter = createRouter()

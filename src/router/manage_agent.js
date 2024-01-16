@@ -10,23 +10,6 @@ export default [
             {
                 path: '/manage/index',
                 name: 'index',
-                component: () =>import ('@/views/manage/index.vue'),
-                meta: { 
-                    title: '概况',
-                    icon: 'el-icon-data-line'
-                }
-            },
-            {
-                path: '/manage/setting',
-                name: 'setting',
-                component: () =>import ('@/views/manage/setting.vue'),
-                meta: { 
-                    title: '设置',
-                    icon: 'el-icon-setting'
-                }
-            },{
-                path: '/manage/level',
-                name: 'level',
                 component: () =>import ('@/views/manage/level.vue'),
                 meta: { 
                     title: '等级',
@@ -68,7 +51,7 @@ export default [
                     title: '打招呼记录',
                     icon: 'el-icon-s-fold'
                 }
-            }, {
+            },{
                 path: '/manage/shop',
                 name: 'shop',
                 component: () =>import ('@/views/manage/shop.vue'),

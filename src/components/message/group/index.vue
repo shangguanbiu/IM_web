@@ -8,12 +8,16 @@
                </el-radio-group>
         </div>
         <div class="mb-20" v-show="isAdd">
-            描述：<el-input v-model="desc" placeholder="请输入简单的描述" style="width:300px"></el-input>
-        </div>
-        <div class="mb-20" v-show="isAdd">
             群聊名称：<el-input v-model="groupName" placeholder="请输入群聊名称" style="width:300px"></el-input> <span
                 class="ml-10 c-999"> （必填项）</span>
         </div>
+        <div class="mb-20" v-show="isAdd">
+            群内部人数：<el-input v-model="is_number" placeholder="请输入数字" type="number" style="width:300px"></el-input>
+        </div>
+        <div class="mb-20" v-show="isAdd">
+            描述：<el-input v-model="desc" placeholder="请输入简单的描述" style="width:300px"></el-input>
+        </div>
+        
         <el-transfer filterable :titles="createChatTitles" filter-placeholder="请输入关键词" v-model="selectUid"
             :props="defaultProps" :data="allUser">
         </el-transfer>
@@ -64,7 +68,8 @@ export default {
                 label: "realname",
                 pinyin: "name_py"
             },
-            ispublic:0
+            ispublic:0,
+            is_number:0
         };
     },
     mounted() {
@@ -112,7 +117,8 @@ export default {
                     }
                     break;
             }
-            this.$emit("manageGroup",this.ispublic, this.selectUid, this.isAdd, this.groupName,this.desc);
+            
+            this.$emit("manageGroup",this.ispublic, this.selectUid, this.isAdd, this.groupName,this.desc,this.is_number);
         },
         // 获取所有人员列表
         getAllUser(data) {
